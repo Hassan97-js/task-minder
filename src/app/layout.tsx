@@ -27,12 +27,12 @@ function RootLayout({ children }: TProps) {
     <html lang="en">
       <body
         className={cn(
-          "grid grid-cols-[9.375rem_repeat(7,_1fr)] lg:grid-cols-[23.125rem_repeat(7,_1fr)] grid-rows-[12.5_repeat(7,_1fr)] dark min-h-screen",
+          "grid grid-cols-[0rem_repeat(7,_1fr)] lg:grid-cols-[12.5rem_repeat(7,_1fr)] grid-rows-[6.25rem_repeat(7,_1fr)] dark min-h-screen",
           font.className
         )}>
         <Navbar />
         <Sidebar />
-        <main className="col-start-2 col-end-9 row-start-2 row-end-9 p-5">
+        <main className="col-start-2 col-end-9 row-start-2 row-end-9 p-5 border-l border-l-gray-900">
           {children}
         </main>
       </body>
