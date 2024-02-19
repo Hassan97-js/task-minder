@@ -1,13 +1,18 @@
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 
-// Todo: User Image URL, User Initials
-function User() {
-  return (
+import { getInitials, getUser } from "@/utils";
+
+async function User() {
+  const user = await getUser();
+
+  console.log(user?.name);
+
+  return user ? (
     <Avatar>
-      <AvatarImage src="https://avatars.githubusercontent.com/u/54324376?v=4" />
-      <AvatarFallback>HS</AvatarFallback>
+      <AvatarImage src={user?.image ?? "/fallback-avatar.jpg"} />
+      <AvatarFallback>{getInitials(user?.name)}</AvatarFallback>
     </Avatar>
-  );
+  ) : null;
 }
 
 export default User;

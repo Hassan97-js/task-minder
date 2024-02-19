@@ -1,3 +1,4 @@
+import SignInButton from "./signin-button";
 import SearchBar from "./search-bar";
 import User from "./user";
 
@@ -7,6 +8,7 @@ function Navbar() {
       <div className="container flex justify-between items-center gap-6">
         <SearchBar />
         <User />
+        <SignInButton />
       </div>
     </nav>
   );
