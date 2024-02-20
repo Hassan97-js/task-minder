@@ -4,20 +4,14 @@ import { signIn } from "next-auth/react";
 
 import { Button } from "./ui/button";
 
-type TProps = {
-  user: {
-    name?: string | null | undefined;
-    email?: string | null | undefined;
-    image?: string | null | undefined;
-  };
-};
+import type { TUser } from "@/types/auth";
 
-function SignInButton({ user }: TProps) {
+function SignInButton() {
   async function handleSignIn() {
     await signIn();
   }
 
-  return !user ? (
+  return (
     <Button
       onClick={handleSignIn}
       type="submit"
@@ -25,7 +19,7 @@ function SignInButton({ user }: TProps) {
       className="flex items-center gap-2 mt-auto w-max h-max text-sm font-medium">
       <span>Sign in</span>
     </Button>
-  ) : null;
+  );
 }
 
 export default SignInButton;

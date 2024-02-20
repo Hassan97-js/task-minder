@@ -5,19 +5,15 @@ import { RxExit as LogOutIcon } from "react-icons/rx";
 
 import { Button } from "./ui/button";
 
+import type { TUser } from "@/types/auth";
+
 type TProps = {
-  user: {
-    name?: string | null | undefined;
-    email?: string | null | undefined;
-    image?: string | null | undefined;
-  };
+  user: TUser;
 };
 
 function SignOutButton({ user }: TProps) {
   async function handleSignOut() {
-    await signOut({
-      callbackUrl: "/"
-    });
+    await signOut();
   }
 
   return user ? (

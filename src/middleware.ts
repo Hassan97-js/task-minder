@@ -1,10 +1,6 @@
 export { default } from "next-auth/middleware";
 
+// "/((?!api|/|_next/static|_next/image|favicon.ico).*)",
 export const config = {
-  matcher: [
-    "/((?!api|_next/static|_next/image|favicon.ico).*)",
-    "/tasks/:path*",
-    "/projects/:path*",
-    "/calender/:path*"
-  ]
+  matcher: ["/tasks/:path*", "/projects/:path*", "/calender/:path*"]
 };

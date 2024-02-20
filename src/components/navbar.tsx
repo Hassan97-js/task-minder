@@ -1,6 +1,7 @@
 import SignInButton from "./signin-button";
 import SearchBar from "./search-bar";
 import User from "./user";
+
 import { getUser } from "@/utils";
 
 async function Navbar() {
@@ -11,7 +12,7 @@ async function Navbar() {
       <div className="container flex justify-between items-center gap-6">
         <SearchBar />
         {user && <User user={user} />}
-        {user && <SignInButton user={user} />}
+        {!user && <SignInButton />}
       </div>
     </nav>
   );
