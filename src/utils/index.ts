@@ -1,3 +1,8 @@
+import type {
+  GetServerSidePropsContext,
+  NextApiRequest,
+  NextApiResponse
+} from "next";
 import { getServerSession } from "next-auth";
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
@@ -24,8 +29,17 @@ export function getInitials(fullName?: string | null) {
   )}`;
 }
 
+type TAuthProps =
+  | [GetServerSidePropsContext["req"], GetServerSidePropsContext["res"]]
+  | [NextApiRequest, NextApiResponse]
+  | [];
+
+export function auth(...args: TAuthProps) {
+  return getServerSession(...args, authOptions);
+}
+
 export async function getUser() {
-  const session = await getServerSession(authOptions);
+  const session = await auth();
   const user = session?.user;
 
   return user;
