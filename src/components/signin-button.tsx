@@ -1,20 +1,30 @@
+"use client";
+
+import { signIn } from "next-auth/react";
+
 import { Button } from "./ui/button";
 
-import { getUser } from "@/utils";
-import { signInAction } from "@/actions/auth.actions";
+type TProps = {
+  user: {
+    name?: string | null | undefined;
+    email?: string | null | undefined;
+    image?: string | null | undefined;
+  };
+};
 
-async function SignInButton() {
-  const user = await getUser();
+function SignInButton({ user }: TProps) {
+  async function handleSignIn() {
+    await signIn();
+  }
 
   return !user ? (
-    <form action={signInAction}>
-      <Button
-        type="submit"
-        variant="outline"
-        className="flex items-center gap-2 mt-auto w-max h-max text-sm font-medium">
-        <span>Sign in</span>
-      </Button>
-    </form>
+    <Button
+      onClick={handleSignIn}
+      type="submit"
+      variant="outline"
+      className="flex items-center gap-2 mt-auto w-max h-max text-sm font-medium">
+      <span>Sign in</span>
+    </Button>
   ) : null;
 }
 

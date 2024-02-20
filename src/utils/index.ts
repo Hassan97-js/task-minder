@@ -1,6 +1,8 @@
-import { auth } from "auth";
+import { getServerSession } from "next-auth";
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
+
+import { authOptions } from "@/constants/auth";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -23,7 +25,7 @@ export function getInitials(fullName?: string | null) {
 }
 
 export async function getUser() {
-  const session = await auth();
+  const session = await getServerSession(authOptions);
   const user = session?.user;
 
   return user;

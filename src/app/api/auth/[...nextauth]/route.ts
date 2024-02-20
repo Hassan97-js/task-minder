@@ -1,8 +1,6 @@
-import NextAuth, { type AuthOptions } from "next-auth";
+import NextAuth from "next-auth";
 
-const authOptions = {
-  providers: []
-} satisfies AuthOptions;
+import { authOptions } from "@/constants/auth";
 
 const handler = NextAuth(authOptions);
 

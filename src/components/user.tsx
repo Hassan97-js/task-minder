@@ -1,12 +1,17 @@
+import { User as TUser } from "next-auth";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 
-import { getInitials, getUser } from "@/utils";
+import { getInitials } from "@/utils";
 
-async function User() {
-  const user = await getUser();
+type TProps = {
+  user: {
+    name?: string | null | undefined;
+    email?: string | null | undefined;
+    image?: string | null | undefined;
+  };
+};
 
-  console.log(user?.name);
-
+async function User({ user }: TProps) {
   return user ? (
     <Avatar>
       <AvatarImage src={user?.image ?? "/fallback-avatar.jpg"} />
