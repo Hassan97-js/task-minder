@@ -24,5 +24,8 @@ const githubConfig = {
 
 export const authOptions = {
   adapter: PrismaAdapter(prisma) as Adapter,
-  providers: [Google(googleConfig), Github(githubConfig)]
+  providers: [Google(googleConfig), Github(githubConfig)],
+  pages: {
+    error: "/error" // Error code passed in query string as ?error=
+  }
 } satisfies AuthOptions;
