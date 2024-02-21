@@ -8,7 +8,7 @@ type TProps = {
 };
 
 function Providers({ children }: TProps) {
-  return <SessionProvider >{children}</SessionProvider>;
+  return <SessionProvider>{children}</SessionProvider>;
 }
 
 export default Providers;

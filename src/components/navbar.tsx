@@ -12,7 +12,13 @@ async function Navbar() {
       <div className="container flex justify-between items-center gap-6">
         <SearchBar />
         {user && <User user={user} />}
-        {!user && <SignInButton />}
+
+        {!user && (
+          <div className="flex items-center gap-3">
+            <SignInButton providerId="github" />
+            <SignInButton providerId="google" />
+          </div>
+        )}
       </div>
     </nav>
   );
