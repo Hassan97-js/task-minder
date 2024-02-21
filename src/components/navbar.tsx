@@ -1,3 +1,4 @@
+import Link from "next/link";
 import SignInButton from "./signin-button";
 import SearchBar from "./search-bar";
 import User from "./user";
@@ -15,8 +16,9 @@ async function Navbar() {
 
         {!user && (
           <div className="flex items-center gap-3">
-            <SignInButton providerId="github" />
-            <SignInButton providerId="google" />
+            <Link href="/sign-in" className="ml-4">
+              <SignInButton providerId="credentials" />
+            </Link>
           </div>
         )}
       </div>
