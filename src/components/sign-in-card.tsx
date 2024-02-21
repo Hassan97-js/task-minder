@@ -18,27 +18,13 @@ import {
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 
-const signInFormSchema = z.object({
-  username: z
-    .string()
-    .min(2, {
-      message: "Username must be at least 2 characters."
-    })
-    .max(50, {
-      message: "Username must be max 50 characters."
-    }),
-  password: z
-    .string()
-    .min(8, {
-      message: "Password must be at least 8 characters."
-    })
-    .max(25, {
-      message: "Password must be max 50 characters."
-    })
-});
+import {
+  type TSignInForm,
+  signInFormSchema
+} from "@/constants/validators/auth";
 
 function SignInCard() {
-  const form = useForm<z.infer<typeof signInFormSchema>>({
+  const form = useForm<TSignInForm>({
     resolver: zodResolver(signInFormSchema),
     defaultValues: {
       username: "",
@@ -46,6 +32,7 @@ function SignInCard() {
     }
   });
 
+  // Todo: Implement handleSignIn handler
   function handleSignIn(values: z.infer<typeof signInFormSchema>) {
     console.log(values);
   }
