@@ -2,14 +2,13 @@
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
+import { signIn } from "next-auth/react";
 
 import SignInButton from "./signin-button";
 
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -27,14 +26,32 @@ function SignInCard() {
   const form = useForm<TSignInForm>({
     resolver: zodResolver(signInFormSchema),
     defaultValues: {
-      username: "",
+      email: "",
       password: ""
     }
   });
 
-  // Todo: Implement handleSignIn handler
-  function handleSignIn(values: z.infer<typeof signInFormSchema>) {
-    console.log(values);
+  async function handleSignIn(values: TSignInForm) {
+    try {
+      const { password, email } = values;
+
+      const response = await signIn("credentials", {
+        email,
+        password,
+        redirect: false
+      });
+
+      // if (!response?.ok) {
+      //   throw new Error("Email or password is invalid");
+      // }
+    } catch (error) {
+      if (error instanceof Error) {
+        alert(error.message);
+        return;
+      }
+
+      alert("Email or password is invalid");
+    }
   }
 
   return (
@@ -44,7 +61,7 @@ function SignInCard() {
           Sign in With
         </h2>
 
-        <div className="flex flex-col md:flex-row items-center justify-center gap-3">
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
           <SignInButton providerId="github" githubClassName="w-5 h-5" />
           <SignInButton providerId="google" googleClassName="w-5 h-5" />
         </div>
@@ -56,16 +73,13 @@ function SignInCard() {
           className="flex flex-col gap-5 flex-1">
           <FormField
             control={form.control}
-            name="username"
-            render={() => (
+            name="email"
+            render={({ field }) => (
               <FormItem>
-                <FormLabel>Username</FormLabel>
+                <FormLabel>Email</FormLabel>
                 <FormControl>
-                  <Input />
+                  <Input placeholder="Email" {...field} />
                 </FormControl>
-                <FormDescription>
-                  This is your public display name.
-                </FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -74,17 +88,17 @@ function SignInCard() {
           <FormField
             control={form.control}
             name="password"
-            render={() => (
+            render={({ field }) => (
               <FormItem>
                 <FormLabel>Password</FormLabel>
                 <FormControl>
-                  <Input />
+                  <Input placeholder="Password" {...field} />
                 </FormControl>
-                <FormDescription>This is your password.</FormDescription>
                 <FormMessage />
               </FormItem>
             )}
           />
+
           <Button type="submit" className="mt-4">
             Sign in
           </Button>

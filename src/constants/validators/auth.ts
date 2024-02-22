@@ -1,13 +1,14 @@
 import { z } from "zod";
 
 export const signInFormSchema = z.object({
-  username: z
+  email: z
     .string()
+    .email()
     .min(2, {
-      message: "Username must be at least 2 characters."
+      message: "Email must be at least 7 characters"
     })
     .max(50, {
-      message: "Username must be max 50 characters."
+      message: "Email must be max 50 characters."
     }),
   password: z
     .string()
