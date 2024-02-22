@@ -45,16 +45,8 @@ function SignInCard() {
         </h2>
 
         <div className="flex flex-col md:flex-row items-center justify-center gap-3">
-          <SignInButton
-            className="py-3 px-8 text-base w-36"
-            providerId="github"
-            githubClassName="w-5 h-5"
-          />
-          <SignInButton
-            className="py-3 px-8 text-base w-36"
-            providerId="google"
-            googleClassName="w-5 h-5"
-          />
+          <SignInButton providerId="github" githubClassName="w-5 h-5" />
+          <SignInButton providerId="google" googleClassName="w-5 h-5" />
         </div>
       </div>
 

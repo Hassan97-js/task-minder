@@ -29,10 +29,8 @@ function SignInButton({
   const buttonAttriubtes = {
     type: "submit",
     variant: "outline",
-    className: cn(
-      "flex items-center gap-2 mt-auto w-max h-max text-sm font-medium",
-      className
-    ),
+    className: cn("flex items-center gap-2 mt-auto", className),
+    size: "lg",
     ...(isGoogle && { onClick: handleSignInWithGoogle }),
     ...(isGithub && { onClick: handleSignInWithGithub })
   } satisfies ButtonProps;
