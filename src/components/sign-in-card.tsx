@@ -1,5 +1,6 @@
 "use client";
 
+import { useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signIn } from "next-auth/react";
@@ -23,6 +24,7 @@ import {
 } from "@/constants/validators/auth";
 
 function SignInCard() {
+  const searchParams = useSearchParams();
   const form = useForm<TSignInForm>({
     resolver: zodResolver(signInFormSchema),
     defaultValues: {
@@ -35,15 +37,15 @@ function SignInCard() {
     try {
       const { password, email } = values;
 
-      const response = await signIn("credentials", {
+      const callbackUrl = searchParams.get("callbackUrl");
+      const pathname = callbackUrl ? new URL(callbackUrl).pathname : "/";
+
+      await signIn("credentials", {
         email,
         password,
-        redirect: false
+        redirect: true,
+        callbackUrl: pathname
       });
-
-      // if (!response?.ok) {
-      //   throw new Error("Email or password is invalid");
-      // }
     } catch (error) {
       if (error instanceof Error) {
         alert(error.message);
@@ -92,7 +94,7 @@ function SignInCard() {
               <FormItem>
                 <FormLabel>Password</FormLabel>
                 <FormControl>
-                  <Input placeholder="Password" {...field} />
+                  <Input type="password" placeholder="Password" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

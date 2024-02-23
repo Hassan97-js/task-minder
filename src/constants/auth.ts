@@ -1,14 +1,12 @@
 import { type AuthOptions } from "next-auth";
+import { PrismaAdapter } from "@auth/prisma-adapter";
+import { type Adapter } from "next-auth/adapters";
 import Github from "next-auth/providers/github";
 import Google from "next-auth/providers/google";
 import CredentialsProivder from "next-auth/providers/credentials";
-// import bcrypt from "bcrypt";
-import bcrypt from "bcrypt";
 
-import { PrismaAdapter } from "@auth/prisma-adapter";
-import prisma from "@/utils/db";
-import { Adapter } from "next-auth/adapters";
-import { createUser } from "@/actions/auth.actions";
+import { checkUserPassword, createUser } from "@/actions/auth.actions";
+import db from "@/utils/db";
 
 const googleID = process.env.AUTH_GOOGLE_ID!;
 const googleSecret = process.env.AUTH_GOOGLE_SECRET!;
@@ -31,12 +29,15 @@ const credentialsConfig = {
 };
 
 export const authOptions = {
-  adapter: PrismaAdapter(prisma) as Adapter,
+  session: {
+    strategy: "jwt"
+  },
+  adapter: PrismaAdapter(db) as Adapter,
   providers: [
     Google(googleConfig),
     Github(githubConfig),
     CredentialsProivder({
-      name: "",
+      name: "Credentials",
       credentials: {
         email: {
           label: "Email",
@@ -59,10 +60,7 @@ export const authOptions = {
             password
           });
 
-          const isCorrectPassword = bcrypt.compareSync(
-            password,
-            String(user.password)
-          );
+          const isCorrectPassword = await checkUserPassword(password, user);
 
           if (isCorrectPassword) {
             return user;
@@ -72,7 +70,8 @@ export const authOptions = {
         }
 
         return null;
-      }
+      },
+      type: "credentials"
     })
   ],
   pages: {

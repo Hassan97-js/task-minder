@@ -1,5 +1,6 @@
 "use server";
 
+import { TUserWithId } from "@/types/auth";
 import db from "@/utils/db";
 import bcrypt from "bcrypt";
 
@@ -30,4 +31,10 @@ export async function createUser({ email, password }: TCreateUser) {
   });
 
   return newUser;
+}
+
+export async function checkUserPassword(password: string, user: TUserWithId) {
+  const isCorrectPassword = bcrypt.compareSync(password, String(user.password));
+
+  return isCorrectPassword;
 }

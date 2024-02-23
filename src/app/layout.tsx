@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
 import { Poppins as Font } from "next/font/google";
 
+import Providers from "@/providers";
+
 import Navbar from "@/components/navbar";
 import Sidebar from "@/components/sidebar";
 import { cn } from "@/utils";
 
 import "@/styles/globals.css";
-import Providers from "@/providers";
 
 const font = Font({
   subsets: ["latin"],
@@ -22,7 +23,7 @@ type TProps = Readonly<{
   children: React.ReactNode;
 }>;
 
-function RootLayout({ children }: TProps) {
+async function RootLayout({ children }: TProps) {
   return (
     <Providers>
       <html lang="en">
