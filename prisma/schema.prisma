@@ -15,6 +15,20 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
+model Task {
+  id     String     @id @default(uuid())
+  text   String
+  status TaskStatus
+  user   User       @relation(fields: [userId], references: [id])
+  userId String
+}
+
+enum TaskStatus {
+  TODO
+  IN_PROGRESS
+  DONE
+}
+
 model Account {
   id                String  @id @default(cuid())
   userId            String
@@ -51,6 +65,7 @@ model User {
   image         String?
   accounts      Account[]
   sessions      Session[]
+  Task          Task[]
 }
 
 model VerificationToken {
