@@ -1,6 +1,6 @@
 "use client";
 
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signIn } from "next-auth/react";
@@ -24,6 +24,7 @@ import {
 } from "@/constants/validators/auth";
 
 function SignInCard() {
+  const router = useRouter();
   const searchParams = useSearchParams();
   const form = useForm<TSignInForm>({
     resolver: zodResolver(signInFormSchema),
@@ -33,19 +34,25 @@ function SignInCard() {
     }
   });
 
+  const isSubmitting = form.formState.isSubmitting;
+
   async function handleSignIn(values: TSignInForm) {
     try {
       const { password, email } = values;
 
-      const callbackUrl = searchParams.get("callbackUrl");
-      const pathname = callbackUrl ? new URL(callbackUrl).pathname : "/";
-
-      await signIn("credentials", {
+      const response = await signIn("credentials", {
         email,
         password,
-        redirect: true,
-        callbackUrl: pathname
+        redirect: false
       });
+
+      if (!response?.ok) {
+        throw new Error("Email or password is invalid");
+      }
+
+      const callbackUrl = searchParams?.get("callbackUrl");
+      const pathname = callbackUrl ? new URL(callbackUrl).pathname : "/";
+      router.push(pathname);
     } catch (error) {
       if (error instanceof Error) {
         alert(error.message);
@@ -64,8 +71,16 @@ function SignInCard() {
         </h2>
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-          <SignInButton providerId="github" githubClassName="w-5 h-5" />
-          <SignInButton providerId="google" googleClassName="w-5 h-5" />
+          <SignInButton
+            disabled={isSubmitting}
+            providerId="github"
+            githubClassName="w-5 h-5"
+          />
+          <SignInButton
+            disabled={isSubmitting}
+            providerId="google"
+            googleClassName="w-5 h-5"
+          />
         </div>
       </div>
 
@@ -80,7 +95,11 @@ function SignInCard() {
               <FormItem>
                 <FormLabel>Email</FormLabel>
                 <FormControl>
-                  <Input placeholder="Email" {...field} />
+                  <Input
+                    disabled={isSubmitting}
+                    placeholder="Email"
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -94,14 +113,19 @@ function SignInCard() {
               <FormItem>
                 <FormLabel>Password</FormLabel>
                 <FormControl>
-                  <Input type="password" placeholder="Password" {...field} />
+                  <Input
+                    disabled={isSubmitting}
+                    type="password"
+                    placeholder="Password"
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
 
-          <Button type="submit" className="mt-4">
+          <Button disabled={isSubmitting} type="submit" className="mt-4">
             Sign in
           </Button>
         </form>

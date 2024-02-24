@@ -16,7 +16,7 @@ async function Navbar() {
 
         {!user && (
           <div className="flex items-center gap-3">
-            <Link href="/sign-in" className="ml-4">
+            <Link href="/auth/signin" className="ml-4">
               <SignInButton providerId="credentials" />
             </Link>
           </div>

@@ -14,13 +14,15 @@ type TProps = {
   className?: string;
   googleClassName?: string;
   githubClassName?: string;
+  disabled?: boolean;
 };
 
 function SignInButton({
   providerId,
   className,
   githubClassName,
-  googleClassName
+  googleClassName,
+  disabled
 }: TProps) {
   const isGoogle = providerId === "google";
   const isGithub = providerId === "github";
@@ -30,17 +32,22 @@ function SignInButton({
     type: "submit",
     variant: "outline",
     className: cn("flex items-center gap-2 mt-auto", className),
+    disabled,
     size: "lg",
     ...(isGoogle && { onClick: handleSignInWithGoogle }),
     ...(isGithub && { onClick: handleSignInWithGithub })
   } satisfies ButtonProps;
 
   function handleSignInWithGoogle() {
-    signIn("google");
+    signIn("google", {
+      callbackUrl: "/"
+    });
   }
 
   function handleSignInWithGithub() {
-    signIn("github");
+    signIn("github", {
+      callbackUrl: "/"
+    });
   }
 
   return (

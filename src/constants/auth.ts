@@ -25,7 +25,42 @@ const githubConfig = {
 };
 
 const credentialsConfig = {
-  name: ""
+  name: "Credentials",
+  credentials: {
+    email: {
+      label: "Email",
+      type: "text",
+      placeholder: "Enter your Email"
+    },
+    password: {
+      label: "Password",
+      type: "password",
+      placeholder: "Enter your password"
+    }
+  },
+  async authorize(
+    credentials: Record<"password" | "email", string> | undefined
+  ) {
+    if (credentials) {
+      const password = credentials?.password;
+      const email = credentials?.email;
+
+      const user = await createUser({
+        email,
+        password
+      });
+
+      const isCorrectPassword = await checkUserPassword(password, user);
+
+      if (isCorrectPassword) {
+        return user;
+      }
+
+      return null;
+    }
+
+    return null;
+  }
 };
 
 export const authOptions = {
@@ -36,46 +71,9 @@ export const authOptions = {
   providers: [
     Google(googleConfig),
     Github(githubConfig),
-    CredentialsProivder({
-      name: "Credentials",
-      credentials: {
-        email: {
-          label: "Email",
-          type: "text",
-          placeholder: "Enter your Email"
-        },
-        password: {
-          label: "Password",
-          type: "password",
-          placeholder: "Enter your password"
-        }
-      },
-      async authorize(credentials) {
-        if (credentials) {
-          const password = credentials?.password;
-          const email = credentials?.email;
-
-          const user = await createUser({
-            email,
-            password
-          });
-
-          const isCorrectPassword = await checkUserPassword(password, user);
-
-          if (isCorrectPassword) {
-            return user;
-          }
-
-          return null;
-        }
-
-        return null;
-      },
-      type: "credentials"
-    })
+    CredentialsProivder(credentialsConfig)
   ],
   pages: {
-    error: "/error",
-    signIn: "/sign-in"
+    signIn: "/auth/signin"
   }
 } satisfies AuthOptions;

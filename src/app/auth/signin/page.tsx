@@ -11,14 +11,14 @@ type TProps = {
 async function SignIn({ searchParams }: TProps) {
   const session = await auth();
 
-   if (session) {
+  if (session) {
     const callbackUrl = searchParams.callbackUrl;
     const pathname = callbackUrl ? new URL(callbackUrl).pathname : "/";
     return redirect(pathname);
   }
 
   return (
-    <section className="flex justify-center items-center w-full h-full">
+    <section className="flex justify-center items-center w-full min-h-screen">
       <SignInCard />
     </section>
   );
