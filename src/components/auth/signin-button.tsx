@@ -6,7 +6,7 @@ import {
   AiOutlineGithub as GithubIcon
 } from "react-icons/ai";
 
-import { Button, type ButtonProps } from "./ui/button";
+import { Button, type ButtonProps } from "../ui/button";
 import { cn } from "@/utils";
 
 type TProps = {

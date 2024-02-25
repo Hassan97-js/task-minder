@@ -1,5 +1,11 @@
+import UserTasks from "@/components/tasks/user-tasks";
+
 function Tasks() {
-  return <div>Tasks</div>;
+  return (
+    <section className="w-full h-full container">
+      <UserTasks />
+    </section>
+  );
 }
 
 export default Tasks;

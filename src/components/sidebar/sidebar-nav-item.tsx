@@ -1,10 +1,10 @@
 "use client";
 
+import Link from "next/link";
 import { type ReactNode } from "react";
 import { usePathname } from "next/navigation";
-import Link from "next/link";
 
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 
 type TProps = {
   text: string;

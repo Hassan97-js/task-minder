@@ -3,7 +3,7 @@
 import { signOut } from "next-auth/react";
 import { RxExit as LogOutIcon } from "react-icons/rx";
 
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 
 function SignOutButton() {
   async function handleSignOut() {

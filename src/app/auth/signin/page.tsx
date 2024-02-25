@@ -1,4 +1,4 @@
-import SignInCard from "@/components/sign-in-card";
+import SignInCard from "@/components/auth/sign-in-card";
 import { auth } from "@/utils";
 import { redirect } from "next/navigation";
 

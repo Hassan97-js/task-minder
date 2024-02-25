@@ -11,13 +11,13 @@ type TProps = {
   reset: () => void;
 };
 
-function Error({ error, reset }: TProps) {
+function TasksError({ error, reset }: TProps) {
   useEffect(() => {
     console.error(error);
   }, [error]);
 
   return (
-    <div className="w-full min-h-screen flex flex-col justify-center items-center">
+    <div className="w-full h-full flex flex-col justify-center items-center">
       <h2 className="text-4xl font-bold mb-7 first-letter:uppercase text-center">
         Something went wrong!
       </h2>
@@ -26,4 +26,4 @@ function Error({ error, reset }: TProps) {
   );
 }
 
-export default Error;
+export default TasksError;

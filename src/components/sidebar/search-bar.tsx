@@ -10,8 +10,8 @@ import {
   CommandInput,
   CommandItem,
   CommandList
-} from "./ui/command";
-import { Button } from "./ui/button";
+} from "../ui/command";
+import { Button } from "../ui/button";
 
 function SearchBar() {
   const [isOpen, setIsOpen] = useState(false);

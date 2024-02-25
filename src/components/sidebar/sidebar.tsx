@@ -1,5 +1,5 @@
-import Logo from "./logo";
-import SignOutButton from "./signout-button";
+import Logo from "../navbar/logo";
+import SignOutButton from "../auth/signout-button";
 import SidebarNav from "./sidebar-nav";
 
 import { getUser } from "@/utils";
