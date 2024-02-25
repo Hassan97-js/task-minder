@@ -1,11 +1,13 @@
-import TaskItemBody from "./task-item-body";
-import TaskItemHeader from "./task-item-header";
+import { type ReactNode } from "react";
 
-function TaskItem() {
+type TProps = {
+  children: ReactNode;
+};
+
+function TaskItem({ children }: TProps) {
   return (
-    <div className="w-full h-48 bg-secondary/40 p-5 rounded-sm">
-      <TaskItemHeader />
-      <TaskItemBody />
+    <div className="flex flex-col gap-6 w-full bg-secondary/30 px-5 py-7 rounded-sm">
+      {children}
     </div>
   );
 }

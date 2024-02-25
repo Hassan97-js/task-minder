@@ -1,18 +1,13 @@
-import TaskWrapper from "./task-wrapper";
-import TaskItem from "./task-item";
+import { type ReactNode } from "react";
 
-function TasksBody() {
+type TProps = {
+  children: ReactNode;
+};
+
+function TasksBody({ children }: TProps) {
   return (
-    <div className="h-full w-full flex flex-col lg:flex-row gap-10 pb-5">
-      <TaskWrapper type="todo">
-        <TaskItem />
-      </TaskWrapper>
-      <TaskWrapper type="in-progress">
-        <TaskItem />
-      </TaskWrapper>
-      <TaskWrapper type="done">
-        <TaskItem />
-      </TaskWrapper>
+    <div className="h-full w-full flex flex-col xl:flex-row gap-10 pb-5">
+      {children}
     </div>
   );
 }
