@@ -1,5 +1,3 @@
-import { type Task as TTask } from "@prisma/client";
-
 import TasksHeader from "./tasks-header";
 import TasksBody from "./tasks-body";
 import TaskColumn from "./task-column";
@@ -7,30 +5,17 @@ import TaskItem from "./task-item";
 import TaskItemHeader from "./task-item-header";
 import TaskItemBody from "./task-item-body";
 
+import { getTasks } from "@/utils/tasks";
+import { auth } from "@/utils";
+
 async function UserTasks() {
-  const tasks = [
-    {
-      id: "1",
-      status: "TODO",
-      text: "Todo 1",
-      userId: "123"
-    },
-    {
-      id: "2",
-      status: "IN_PROGRESS",
-      text: "Todo 2",
-      userId: "1234"
-    },
-    {
-      id: "3",
-      status: "DONE",
-      text: "Todo 3",
-      userId: "12345"
-    }
-  ] satisfies TTask[];
+  const session = await auth();
+  const userId = session?.user?.id;
+
+  const tasks = await getTasks(userId);
 
   const todoTasksElements = tasks
-    .filter((task) => task.status === "TODO")
+    ?.filter((task) => task.status === "TODO")
     .map((task) => {
       return (
         <TaskItem key={task.id}>
@@ -41,7 +26,7 @@ async function UserTasks() {
     });
 
   const inProgressTasksElements = tasks
-    .filter((task) => task.status === "IN_PROGRESS")
+    ?.filter((task) => task.status === "IN_PROGRESS")
     .map((task) => {
       return (
         <TaskItem key={task.id}>
@@ -52,7 +37,7 @@ async function UserTasks() {
     });
 
   const doneTasksElements = tasks
-    .filter((task) => task.status === "DONE")
+    ?.filter((task) => task.status === "DONE")
     .map((task) => {
       return (
         <TaskItem key={task.id}>

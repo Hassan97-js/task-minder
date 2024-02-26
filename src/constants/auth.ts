@@ -64,6 +64,21 @@ const credentialsConfig = {
 };
 
 export const authOptions = {
+  callbacks: {
+    jwt({ token, account, user }) {
+      if (account) {
+        token.id = user.id;
+      }
+      return token;
+    },
+    session({ session, token }) {
+      if (token.id) {
+        session.user.id = token.id;
+      }
+
+      return session;
+    }
+  },
   session: {
     strategy: "jwt"
   },

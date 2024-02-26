@@ -32,6 +32,8 @@ function CreateTaskInput({ onCancelCreateTask, onCreateTask }: TProps) {
     }
   });
 
+  const isSubmitting = form.formState.isSubmitting;
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onCreateTask)}>
@@ -43,7 +45,11 @@ function CreateTaskInput({ onCancelCreateTask, onCreateTask }: TProps) {
               <FormItem>
                 <FormLabel>New task</FormLabel>
                 <FormControl>
-                  <Textarea placeholder="Type a name..." {...field} />
+                  <Textarea
+                    disabled={isSubmitting}
+                    placeholder="Type a name..."
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -51,10 +57,16 @@ function CreateTaskInput({ onCancelCreateTask, onCreateTask }: TProps) {
           }}
         />
         <div className="flex justify-end mt-3">
-          <Button onClick={onCancelCreateTask} type="button" variant="link">
+          <Button
+            disabled={isSubmitting}
+            onClick={onCancelCreateTask}
+            type="button"
+            variant="link">
             Cancel
           </Button>
-          <Button type="submit">Create</Button>
+          <Button disabled={isSubmitting} type="submit">
+            Create
+          </Button>
         </div>
       </form>
     </Form>

@@ -13,6 +13,8 @@ import NewTaskButton from "./new-task-button";
 import { TCreateTask } from "@/constants/validators/tasks";
 import { createTaskAction } from "@/actions/tasks.actions";
 
+import { handleError } from "@/utils/handle-error";
+
 type TProps = {
   children: ReactNode;
   type: "todo" | "in-progress" | "done";
@@ -29,12 +31,19 @@ function TaskColumn({ children, type }: TProps) {
     setIsCreating(true);
   }
 
-  function handleCreateTask(values: TCreateTask) {
-    handleShowCreateInput();
-    console.log(values);
+  async function handleCreateTask(values: TCreateTask) {
+    try {
+      handleShowCreateInput();
+      const response = await createTaskAction(values);
 
-    // Todo: Get the user id
-    // createTaskAction(values);
+      if (response?.error) {
+        throw new Error(response.error);
+      }
+    } catch (error) {
+      handleError(error);
+    } finally {
+      setIsCreating(false);
+    }
   }
 
   function handleCancelCreateTask() {
@@ -42,7 +51,7 @@ function TaskColumn({ children, type }: TProps) {
   }
 
   return (
-    <div className="flex flex-col gap-7 w-full h-[43.75rem] lg:h-[62.5rem] overflow-auto max-w-[37.5rem] mx-auto flex-[1_1_43.75rem] border border-muted rounded-lg p-5 bg-secondary/10 text-secondary-foreground">
+    <div className="flex flex-col gap-7 w-full min-h-[43.75rem] lg:h-[62.5rem] max-w-[43.75rem] mx-auto flex-[1_1_43.75rem] border border-muted rounded-lg p-5 bg-secondary/10 text-secondary-foreground">
       <p className="flex items-center gap-3">
         {isTodo && <TodoIcon className="w-5 h-5" />}
         {isInProgress && <InProgressIcon className="w-5 h-5" />}
@@ -55,8 +64,6 @@ function TaskColumn({ children, type }: TProps) {
         </span>
       </p>
 
-      {children}
-
       {isCreating && (
         <CreateTaskInput
           onCreateTask={handleCreateTask}
@@ -64,8 +71,15 @@ function TaskColumn({ children, type }: TProps) {
         />
       )}
 
+      <div className="flex flex-col gap-5 overflow-auto flex-auto">
+        {children}
+      </div>
+
       {type === "todo" && (
-        <NewTaskButton onCreateTask={handleShowCreateInput} />
+        <NewTaskButton
+          onCreateTask={handleShowCreateInput}
+          className="flex-1 min-h-9 max-h-9"
+        />
       )}
     </div>
   );

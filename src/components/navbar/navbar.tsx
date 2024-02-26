@@ -9,7 +9,7 @@ async function Navbar() {
   const user = await getUser();
 
   return (
-    <nav className="sticky top-0 left-0 flex justify-between items-center w-full p-5 col-start-2 col-end-9 row-start-1 row-end-2 border-b border-b-muted border-l border-l-muted">
+    <nav className="sticky top-0 left-0 flex justify-between items-center w-full p-5 col-start-2 col-end-9 row-start-1 row-end-2 border-b border-b-muted border-l border-l-muted backdrop-filter backdrop-blur-lg bg-opacity-30">
       <div className="container flex justify-between items-center gap-6">
         <SearchBar />
         {user && <User user={user} />}
