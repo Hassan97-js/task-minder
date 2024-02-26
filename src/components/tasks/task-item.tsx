@@ -27,7 +27,8 @@ import {
   type TUpdateTask,
   updateTaskSchema
 } from "@/constants/validators/tasks";
-import { updateTaskAction } from "@/actions/tasks.actions";
+import { deleteTaskAction, updateTaskAction } from "@/actions/tasks.actions";
+import { handleError } from "@/utils/handle-error";
 
 type TProps = {
   user: TUser;
@@ -36,6 +37,7 @@ type TProps = {
 
 function TaskItem({ user, task }: TProps) {
   const [isEditing, setIsEditing] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const form = useForm<z.infer<typeof updateTaskSchema>>({
     resolver: zodResolver(updateTaskSchema),
@@ -44,12 +46,26 @@ function TaskItem({ user, task }: TProps) {
     }
   });
 
+  const isSubmitting = form.formState.isSubmitting;
+
   async function handleUpdateTask(values: TUpdateTask) {
     try {
       await updateTaskAction(values, task.id);
     } catch (error) {
+      return handleError(error, "Error updating task");
     } finally {
       setIsEditing(false);
+    }
+  }
+
+  async function handleDeleteTask() {
+    try {
+      setIsDeleting(true);
+      await deleteTaskAction(task.id);
+    } catch (error) {
+      return handleError(error, "Error deleting task");
+    } finally {
+      setIsDeleting(false);
     }
   }
 
@@ -62,7 +78,10 @@ function TaskItem({ user, task }: TProps) {
     <div className="flex flex-col gap-6 w-full bg-secondary/30 px-5 py-7 rounded-sm">
       <TaskItemHeader>
         <TaskItemCreator user={user} />
-        <TaskItemActions onEdit={() => setIsEditing(true)} />
+        <TaskItemActions
+          onDelete={handleDeleteTask}
+          onEdit={() => setIsEditing(true)}
+        />
       </TaskItemHeader>
       {!isEditing && <TaskItemBody text={task?.text} />}
       {isEditing && (
@@ -78,6 +97,7 @@ function TaskItem({ user, task }: TProps) {
                     <FormControl>
                       <Input
                         {...field}
+                        disabled={isDeleting || isSubmitting}
                         placeholder="New task name"
                         maxLength={40}
                       />
@@ -90,12 +110,15 @@ function TaskItem({ user, task }: TProps) {
 
             <div className="flex justify-end mt-3">
               <Button
+                disabled={isDeleting || isSubmitting}
                 type="button"
                 variant="link"
                 onClick={handleCancelUpdateTask}>
                 Cancel
               </Button>
-              <Button type="submit">Save</Button>
+              <Button disabled={isDeleting || isSubmitting} type="submit">
+                Save
+              </Button>
             </div>
           </form>
         </Form>

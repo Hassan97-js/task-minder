@@ -14,9 +14,10 @@ import {
 
 type TProps = {
   onEdit: () => void;
+  onDelete: () => void;
 };
 
-function TaskItemActions({ onEdit }: TProps) {
+function TaskItemActions({ onEdit, onDelete }: TProps) {
   return (
     <div className="flex gap-2 items-center">
       <Button variant="secondary" size="sm">
@@ -30,7 +31,7 @@ function TaskItemActions({ onEdit }: TProps) {
           size="icon">
           <EditIcon className="w-5 h-5" />
         </Button>
-        <Button variant="ghost" size="icon">
+        <Button onClick={() => onDelete()} variant="ghost" size="icon">
           <DeleteIcon className="w-5 h-5 text-red-500/80" />
         </Button>
       </div>
