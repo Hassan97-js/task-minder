@@ -1,15 +1,21 @@
+import { redirect } from "next/navigation";
+
 import TasksHeader from "./tasks-header";
 import TasksBody from "./tasks-body";
 import TaskColumn from "./task-column";
 import TaskItem from "./task-item";
-import TaskItemHeader from "./task-item-header";
-import TaskItemBody from "./task-item-body";
 
 import { getTasks } from "@/utils/tasks";
 import { auth } from "@/utils";
 
 async function UserTasks() {
   const session = await auth();
+
+  if (!session) {
+    redirect("/auth/signin");
+  }
+
+  const user = session?.user;
   const userId = session?.user?.id;
 
   const tasks = await getTasks(userId);
@@ -17,34 +23,19 @@ async function UserTasks() {
   const todoTasksElements = tasks
     ?.filter((task) => task.status === "TODO")
     .map((task) => {
-      return (
-        <TaskItem key={task.id}>
-          <TaskItemHeader />
-          <TaskItemBody text={task.text} />
-        </TaskItem>
-      );
+      return <TaskItem key={task.id} user={user} task={task} />;
     });
 
   const inProgressTasksElements = tasks
     ?.filter((task) => task.status === "IN_PROGRESS")
     .map((task) => {
-      return (
-        <TaskItem key={task.id}>
-          <TaskItemHeader />
-          <TaskItemBody text={task.text} />
-        </TaskItem>
-      );
+      return <TaskItem key={task.id} user={user} task={task} />;
     });
 
   const doneTasksElements = tasks
     ?.filter((task) => task.status === "DONE")
     .map((task) => {
-      return (
-        <TaskItem key={task.id}>
-          <TaskItemHeader />
-          <TaskItemBody text={task.text} />
-        </TaskItem>
-      );
+      return <TaskItem key={task.id} user={user} task={task} />;
     });
 
   return (

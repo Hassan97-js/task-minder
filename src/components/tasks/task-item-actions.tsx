@@ -12,17 +12,24 @@ import {
   DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
 
-function TaskItemActions() {
+type TProps = {
+  onEdit: () => void;
+};
+
+function TaskItemActions({ onEdit }: TProps) {
   return (
-    <form className="flex gap-2 items-center">
+    <div className="flex gap-2 items-center">
       <Button variant="secondary" size="sm">
         Show
       </Button>
       <div className="flex items-center">
-        <Button variant="ghost" size="icon">
+        <Button
+          onClick={() => onEdit()}
+          type="submit"
+          variant="ghost"
+          size="icon">
           <EditIcon className="w-5 h-5" />
         </Button>
-
         <Button variant="ghost" size="icon">
           <DeleteIcon className="w-5 h-5 text-red-500/80" />
         </Button>
@@ -47,7 +54,7 @@ function TaskItemActions() {
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-    </form>
+    </div>
   );
 }
 

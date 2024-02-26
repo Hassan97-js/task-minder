@@ -1,6 +1,6 @@
 "use server";
 
-import { TUserWithId } from "@/types/auth";
+import { type User as TUser } from "@prisma/client";
 import db from "@/utils/db";
 import bcrypt from "bcrypt";
 
@@ -33,7 +33,7 @@ export async function createUser({ email, password }: TCreateUser) {
   return newUser;
 }
 
-export async function checkUserPassword(password: string, user: TUserWithId) {
+export async function checkUserPassword(password: string, user: TUser) {
   const isCorrectPassword = bcrypt.compareSync(password, String(user.password));
 
   return isCorrectPassword;

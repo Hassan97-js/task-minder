@@ -2,7 +2,12 @@
 
 import { revalidatePath } from "next/cache";
 
-import { TCreateTask } from "@/constants/validators/tasks";
+import {
+  createTaskSchema,
+  updateTaskSchema,
+  type TCreateTask,
+  type TUpdateTask
+} from "@/constants/validators/tasks";
 
 import db from "@/utils/db";
 
@@ -13,13 +18,15 @@ export async function createTaskAction(values: TCreateTask) {
   try {
     const session = await auth();
 
+    const validated = createTaskSchema.parse(values);
+
     if (session) {
       const userId = session?.user?.id;
 
       await db?.task.create({
         data: {
           status: "TODO",
-          text: values.text,
+          text: validated.text,
           userId
         }
       });
@@ -33,5 +40,35 @@ export async function createTaskAction(values: TCreateTask) {
     }
   } catch (error) {
     return handleError(error, "Error creating a task");
+  }
+}
+
+export async function updateTaskAction(values: TUpdateTask, taskId: string) {
+  try {
+    const session = await auth();
+    const validated = updateTaskSchema.parse(values);
+
+    if (session) {
+      const userId = session?.user?.id;
+
+      await db?.task.update({
+        where: {
+          id: taskId,
+          userId
+        },
+        data: {
+          text: validated.text
+        }
+      });
+
+      revalidatePath("/tasks");
+
+      return {
+        error: null,
+        message: "Updated todo"
+      };
+    }
+  } catch (error) {
+    return handleError(error, "Error updating task");
   }
 }
