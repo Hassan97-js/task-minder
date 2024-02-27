@@ -33,9 +33,10 @@ import { handleError } from "@/utils/handle-error";
 type TProps = {
   user: TUser;
   task: TTask;
+  type: "todo" | "in-progress" | "done";
 };
 
-function TaskItem({ user, task }: TProps) {
+function TaskItem({ user, task, type }: TProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
 
@@ -79,8 +80,10 @@ function TaskItem({ user, task }: TProps) {
       <TaskItemHeader>
         <TaskItemCreator user={user} />
         <TaskItemActions
+          type={type}
           onDelete={handleDeleteTask}
           onEdit={() => setIsEditing(true)}
+          taskId={task.id}
         />
       </TaskItemHeader>
       {!isEditing && <TaskItemBody text={task?.text} />}

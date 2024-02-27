@@ -1,3 +1,4 @@
+import { TaskStatus } from "@prisma/client";
 import {
   RxPencil1 as EditIcon,
   RxTrash as DeleteIcon,
@@ -12,12 +13,33 @@ import {
   DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
 
+import { handleError } from "@/utils/handle-error";
+import { markTaskAction } from "@/actions/tasks.actions";
+
 type TProps = {
   onEdit: () => void;
   onDelete: () => void;
+  type: "todo" | "in-progress" | "done";
+  taskId: string;
 };
 
-function TaskItemActions({ onEdit, onDelete }: TProps) {
+function TaskItemActions({ onEdit, onDelete, type, taskId }: TProps) {
+  const isTodo = type === "todo";
+  const isInProgress = type === "in-progress";
+  const isDone = type === "done";
+
+  async function handleTaskMark(status: TaskStatus) {
+    try {
+      if (status !== "TODO" && status !== "IN_PROGRESS" && status !== "DONE") {
+        return;
+      }
+
+      await markTaskAction(status, taskId);
+    } catch (error) {
+      return handleError(error, "Error updating task status");
+    }
+  }
+
   return (
     <div className="flex gap-2 items-center">
       <Button variant="secondary" size="sm">
@@ -44,15 +66,27 @@ function TaskItemActions({ onEdit, onDelete }: TProps) {
         </DropdownMenuTrigger>
 
         <DropdownMenuContent>
-          <DropdownMenuItem className="cursor-pointer">
-            Mark as Todo
-          </DropdownMenuItem>
-          <DropdownMenuItem className="cursor-pointer">
-            Mark as In progress
-          </DropdownMenuItem>
-          <DropdownMenuItem className="cursor-pointer">
-            Mark as Done
-          </DropdownMenuItem>
+          {!isTodo && (
+            <DropdownMenuItem
+              onClick={() => handleTaskMark("TODO")}
+              className="cursor-pointer">
+              Mark as Todo
+            </DropdownMenuItem>
+          )}
+          {!isInProgress && (
+            <DropdownMenuItem
+              onClick={() => handleTaskMark("IN_PROGRESS")}
+              className="cursor-pointer">
+              Mark as In progress
+            </DropdownMenuItem>
+          )}
+          {!isDone && (
+            <DropdownMenuItem
+              onClick={() => handleTaskMark("DONE")}
+              className="cursor-pointer">
+              Mark as Done
+            </DropdownMenuItem>
+          )}
         </DropdownMenuContent>
       </DropdownMenu>
     </div>

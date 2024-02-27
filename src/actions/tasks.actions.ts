@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { type TaskStatus } from "@prisma/client";
 
 import {
   createTaskSchema,
@@ -35,7 +36,7 @@ export async function createTaskAction(values: TCreateTask) {
 
       return {
         error: null,
-        message: "Created todo"
+        message: "Created task"
       };
     }
   } catch (error) {
@@ -65,7 +66,7 @@ export async function updateTaskAction(values: TUpdateTask, taskId: string) {
 
       return {
         error: null,
-        message: "Updated todo"
+        message: "Updated task"
       };
     }
   } catch (error) {
@@ -76,6 +77,7 @@ export async function updateTaskAction(values: TUpdateTask, taskId: string) {
 export async function deleteTaskAction(taskId: string) {
   try {
     const session = await auth();
+
     if (session) {
       const userId = session?.user?.id;
       await db.task.delete({
@@ -89,11 +91,52 @@ export async function deleteTaskAction(taskId: string) {
 
       return {
         error: null,
-        message: "Deleted todo"
+        message: "Deleted task"
       };
     }
     console.log("[DELETED]");
   } catch (error) {
     return handleError(error, "Error deleting task");
+  }
+}
+
+export async function markTaskAction(status: TaskStatus, taskId: string) {
+  try {
+    const session = await auth();
+
+    if (session) {
+      const userId = session.user.id;
+
+      const task = await db.task.findFirst({
+        where: {
+          userId,
+          id: taskId,
+          status
+        }
+      });
+
+      if (task) {
+        throw new Error(`Task already has status ${status}`);
+      }
+
+      await db.task.update({
+        where: {
+          userId,
+          id: taskId
+        },
+        data: {
+          status
+        }
+      });
+
+      revalidatePath("/tasks");
+
+      return {
+        error: null,
+        message: "Updated task status"
+      };
+    }
+  } catch (error) {
+    return handleError(error, "Error updating task status");
   }
 }

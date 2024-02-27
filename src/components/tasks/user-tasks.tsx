@@ -22,15 +22,21 @@ async function UserTasks() {
 
   const todoTasksElements = tasks
     ?.filter((task) => task.status === "TODO")
-    .map((task) => <TaskItem key={task.id} user={user} task={task} />);
+    .map((task) => (
+      <TaskItem key={task.id} user={user} task={task} type="todo" />
+    ));
 
   const inProgressTasksElements = tasks
     ?.filter((task) => task.status === "IN_PROGRESS")
-    .map((task) => <TaskItem key={task.id} user={user} task={task} />);
+    .map((task) => (
+      <TaskItem key={task.id} user={user} task={task} type="in-progress" />
+    ));
 
   const doneTasksElements = tasks
     ?.filter((task) => task.status === "DONE")
-    .map((task) => <TaskItem key={task.id} user={user} task={task} />);
+    .map((task) => (
+      <TaskItem key={task.id} user={user} task={task} type="done" />
+    ));
 
   return (
     <div className="w-full h-full flex flex-col gap-14">
