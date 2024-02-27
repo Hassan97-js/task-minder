@@ -5,7 +5,18 @@ import {
   RxDotsHorizontal as DropdownMenuIcon
 } from "react-icons/rx";
 
-import { Button } from "../ui/button";
+import { Button } from "@/components/ui/button";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger
+} from "@/components/ui/alert-dialog";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -53,9 +64,32 @@ function TaskItemActions({ onEdit, onDelete, type, taskId }: TProps) {
           size="icon">
           <EditIcon className="w-5 h-5" />
         </Button>
-        <Button onClick={() => onDelete()} variant="ghost" size="icon">
-          <DeleteIcon className="w-5 h-5 text-red-500/80" />
-        </Button>
+
+        <AlertDialog>
+          <AlertDialogTrigger asChild>
+            <Button variant="ghost" size="icon">
+              <DeleteIcon className="w-5 h-5 text-red-500/80" />
+            </Button>
+          </AlertDialogTrigger>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+              <AlertDialogDescription>
+                This will permanently delete your task.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <AlertDialogAction onClick={() => onDelete()} asChild>
+                <Button
+                  variant="destructive"
+                  className="bg-destructive text-destructive-foreground hover:bg-destructive/80  active::bg-destructive/80">
+                  Delete
+                </Button>
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </div>
 
       <DropdownMenu>
