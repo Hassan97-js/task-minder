@@ -6,6 +6,7 @@ import {
   RxLapTimer as InProgressIcon,
   RxCheck as DoneIcon
 } from "react-icons/rx";
+import { toast } from "sonner";
 
 import CreateTaskInput from "./create-task-input";
 import NewTaskButton from "./new-task-button";
@@ -40,7 +41,10 @@ function TaskColumn({ children, type }: TProps) {
         throw new Error(response.error);
       }
     } catch (error) {
-      handleError(error);
+      toast.error("Couldn't create a new task", {
+        position: "top-right"
+      });
+      return handleError(error, "Couldn't create a new task");
     } finally {
       setIsCreating(false);
     }

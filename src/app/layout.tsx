@@ -23,13 +23,11 @@ type TProps = Readonly<{
 
 async function RootLayout({ children }: TProps) {
   return (
-    <Providers>
-      <html lang="en">
-        <body className={cn("dark min-h-screen", font.className)}>
-          {children}
-        </body>
-      </html>
-    </Providers>
+    <html lang="en">
+      <body className={cn("dark min-h-screen", font.className)}>
+        <Providers>{children}</Providers>
+      </body>
+    </html>
   );
 }
 

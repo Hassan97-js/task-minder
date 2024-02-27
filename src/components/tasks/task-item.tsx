@@ -6,6 +6,7 @@ import { type User as TUser } from "next-auth";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { toast } from "sonner";
 
 import {
   Form,
@@ -53,6 +54,9 @@ function TaskItem({ user, task, type }: TProps) {
     try {
       await updateTaskAction(values, task.id);
     } catch (error) {
+      toast.error("Couldn't update the task", {
+        position: "top-right"
+      });
       return handleError(error, "Error updating task");
     } finally {
       setIsEditing(false);
@@ -64,6 +68,9 @@ function TaskItem({ user, task, type }: TProps) {
       setIsDeleting(true);
       await deleteTaskAction(task.id);
     } catch (error) {
+      toast.error("Couldn't delete the task", {
+        position: "top-right"
+      });
       return handleError(error, "Error deleting task");
     } finally {
       setIsDeleting(false);

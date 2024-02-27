@@ -4,6 +4,7 @@ import {
   RxTrash as DeleteIcon,
   RxDotsHorizontal as DropdownMenuIcon
 } from "react-icons/rx";
+import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -47,6 +48,9 @@ function TaskItemActions({ onEdit, onDelete, type, taskId }: TProps) {
 
       await markTaskAction(status, taskId);
     } catch (error) {
+      toast.error("Couldn't update the task status", {
+        position: "top-right"
+      });
       return handleError(error, "Error updating task status");
     }
   }
