@@ -31,18 +31,22 @@ import { markTaskAction } from "@/actions/tasks.actions";
 type TProps = {
   onEdit: () => void;
   onDelete: () => void;
-  type: "todo" | "in-progress" | "done";
+  status: TaskStatus;
   taskId: string;
 };
 
-function TaskItemActions({ onEdit, onDelete, type, taskId }: TProps) {
-  const isTodo = type === "todo";
-  const isInProgress = type === "in-progress";
-  const isDone = type === "done";
+function TaskItemActions({ onEdit, onDelete, status, taskId }: TProps) {
+  const isTodo = status === TaskStatus.TODO;
+  const isInProgress = status === TaskStatus.IN_PROGRESS;
+  const isDone = status === TaskStatus.DONE;
 
   async function handleTaskMark(status: TaskStatus) {
     try {
-      if (status !== "TODO" && status !== "IN_PROGRESS" && status !== "DONE") {
+      if (
+        status !== TaskStatus.TODO &&
+        status !== TaskStatus.IN_PROGRESS &&
+        status !== TaskStatus.DONE
+      ) {
         return;
       }
 
