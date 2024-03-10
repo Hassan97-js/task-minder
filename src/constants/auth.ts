@@ -14,16 +14,6 @@ const googleSecret = process.env.AUTH_GOOGLE_SECRET!;
 const githubID = process.env.AUTH_GITHUB_ID!;
 const githubSecret = process.env.AUTH_GITHUB_SECRET!;
 
-const googleConfig = {
-  clientId: googleID,
-  clientSecret: googleSecret
-};
-
-const githubConfig = {
-  clientId: githubID,
-  clientSecret: githubSecret
-};
-
 const credentialsConfig = {
   name: "Credentials",
   credentials: {
@@ -84,8 +74,14 @@ export const authOptions = {
   },
   adapter: PrismaAdapter(db) as Adapter,
   providers: [
-    Google(googleConfig),
-    Github(githubConfig),
+    Google({
+      clientId: googleID,
+      clientSecret: googleSecret
+    }),
+    Github({
+      clientId: githubID,
+      clientSecret: githubSecret
+    }),
     CredentialsProivder(credentialsConfig)
   ],
   pages: {
